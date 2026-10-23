@@ -168,35 +168,52 @@ const VEHICLES = [
 ];
 
 /* ══════════════════════════════
-   NAVEGACIÓN DE SECCIONES
+   NAVEGACIÓN DE SECCIONES (SOPORTE HASH Y RUTAS)
 ══════════════════════════════ */
-function showSection(sectionId) {
+function showSection(sectionId, updateHash = true) {
+  const cleanId = (sectionId || 'home').replace(/^#/, '');
+  const validSections = ['home', 'catalog', 'services', 'contact'];
+  const targetId = validSections.includes(cleanId) ? cleanId : 'home';
+
   // Ocultar todas las secciones
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 
   // Mostrar la sección solicitada
-  const target = document.getElementById(sectionId);
+  const target = document.getElementById(targetId);
   if (target) {
     target.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // Actualizar hash en la URL sin recargar
+  if (updateHash && window.location.hash !== `#${targetId}`) {
+    history.pushState(null, '', `#${targetId}`);
+  }
+
   // Actualizar clases activas en los enlaces
   document.querySelectorAll('.nav-link').forEach(link => {
-    link.classList.toggle('active', link.dataset.section === sectionId);
+    link.classList.toggle('active', link.dataset.section === targetId);
   });
 
   // Cerrar menú hamburguesa si está abierto
   const navLinks = document.getElementById('navLinks');
-  if (navLinks.classList.contains('open')) {
+  if (navLinks && navLinks.classList.contains('open')) {
     navLinks.classList.remove('open');
   }
 
   // Inicializar catálogo si es la sección
-  if (sectionId === 'catalog') {
+  if (targetId === 'catalog') {
     renderCatalog(VEHICLES);
   }
 }
+
+// Escuchar cambios de hash (ej: botón atrás/adelante del navegador o enlaces directos)
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.slice(1);
+  if (hash) {
+    showSection(hash, false);
+  }
+});
 
 /* ══════════════════════════════
    HAMBURGER MENU
@@ -231,7 +248,7 @@ function buildVehicleCard(vehicle) {
     <div class="fleet-card" data-id="${vehicle.id}">
       <div class="fleet-card-img">
         <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model} ${vehicle.year}"
-             loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80'" />
+             loading="lazy" onerror="if(!this.dataset.triedRoot){this.dataset.triedRoot='1';this.src=this.src.replace('images/','');}else{this.src='images/logo-de-pagina.png';}" />
         <span class="fleet-card-badge ${status.cls}">${status.label}</span>
       </div>
       <div class="fleet-card-body">
@@ -367,7 +384,7 @@ function openVehicleModal(vehicleId) {
   content.innerHTML = `
     <div class="vmodal-img">
       <img src="${v.image}" alt="${v.brand} ${v.model}"
-           onerror="this.src='https://images.unsplash.com/photo-1469285994282-454ceb49e63c?auto=format&fit=crop&w=700&q=80'" />
+           onerror="if(!this.dataset.triedRoot){this.dataset.triedRoot='1';this.src=this.src.replace('images/','');}else{this.src='images/logo-de-pagina.png';}" />
     </div>
     <div class="vmodal-body">
       <div class="vmodal-header">
@@ -599,7 +616,7 @@ function buildBookingHTML(v) {
         <div class="form-group" style="margin-top:10px;">
           <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.82rem;color:#495057;font-weight:400;text-transform:none;letter-spacing:0;">
             <input type="checkbox" id="bAcceptTerms" style="margin-top:2px;" />
-            Acepto los <a href="#" style="color:#E87532;text-decoration:underline;">Términos y Condiciones</a> y la <a href="#" style="color:#E87532;text-decoration:underline;">Política de Privacidad</a> de AutoRent Global.
+            Acepto los <a href="javascript:void(0)" onclick="showToast('Términos y condiciones aceptados.');" style="color:#E87532;text-decoration:underline;">Términos y Condiciones</a> y la <a href="javascript:void(0)" onclick="showToast('Política de privacidad aceptada.');" style="color:#E87532;text-decoration:underline;">Política de Privacidad</a> de AutoRent Global.
           </label>
         </div>
         <div class="step-nav">
@@ -922,8 +939,25 @@ window.addEventListener('scroll', () => {
    INICIALIZACIÓN
 ══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Mostrar sección home por defecto
-  showSection('home');
+  // Manejar hash inicial en la URL (ej: misitio.github.io/#catalog)
+  const initialHash = window.location.hash.slice(1);
+  if (initialHash && ['home', 'catalog', 'services', 'contact'].includes(initialHash)) {
+    showSection(initialHash, false);
+  } else {
+    showSection('home', false);
+  }
+
+  // Interceptar clicks en enlaces con hash para transición fluida
+  document.addEventListener('click', (e) => {
+    const anchor = e.target.closest('a[href^="#"]');
+    if (anchor) {
+      const hash = anchor.getAttribute('href').slice(1);
+      if (['home', 'catalog', 'services', 'contact'].includes(hash)) {
+        e.preventDefault();
+        showSection(hash, true);
+      }
+    }
+  });
 
   // Renderizar flota en home
   renderHomeFleet();

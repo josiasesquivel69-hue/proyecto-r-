@@ -25,15 +25,15 @@
       </a>
 
       <nav class="nav-links" id="navLinks">
-        <a href="#" onclick="showSection('home')" class="nav-link active" data-section="home"><i class="fa-solid fa-house"></i> Inicio</a>
-        <a href="#" onclick="showSection('catalog')" class="nav-link" data-section="catalog"><i class="fa-solid fa-car"></i> Catálogo</a>
-        <a href="#" onclick="showSection('services')" class="nav-link" data-section="services"><i class="fa-solid fa-shield-halved"></i> Servicios</a>
-        <a href="#" onclick="showSection('contact')" class="nav-link" data-section="contact"><i class="fa-solid fa-location-dot"></i> Contacto</a>
+        <a href="#home" class="nav-link active" data-section="home"><i class="fa-solid fa-house"></i> Inicio</a>
+        <a href="#catalog" class="nav-link" data-section="catalog"><i class="fa-solid fa-car"></i> Catálogo</a>
+        <a href="#services" class="nav-link" data-section="services"><i class="fa-solid fa-shield-halved"></i> Servicios</a>
+        <a href="#contact" class="nav-link" data-section="contact"><i class="fa-solid fa-location-dot"></i> Contacto</a>
       </nav>
 
       <div class="navbar-actions">
-        <a href="#" onclick="showSection('catalog')" class="btn btn-outline btn-sm"><i class="fa-solid fa-list"></i> Ver flota</a>
-        <a href="#" onclick="openBookingModal(null)" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check"></i> Reservar</a>
+        <a href="#catalog" class="btn btn-outline btn-sm"><i class="fa-solid fa-list"></i> Ver flota</a>
+        <a href="#booking" onclick="openBookingModal(null); return false;" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check"></i> Reservar</a>
         <button class="hamburger" id="hamburger" aria-label="Menú">
           <span></span><span></span><span></span>
         </button>
@@ -554,19 +554,19 @@
       <div class="footer-col">
         <h4 class="footer-heading">Servicios</h4>
         <ul class="footer-links">
-          <li><a href="#" onclick="showSection('catalog')"><i class="fa-solid fa-car fa-fw"></i> Catálogo de vehículos</a></li>
-          <li><a href="#" onclick="showSection('services')"><i class="fa-solid fa-briefcase fa-fw"></i> Alquiler corporativo</a></li>
-          <li><a href="#" onclick="showSection('services')"><i class="fa-solid fa-truck fa-fw"></i> Flotas comerciales</a></li>
-          <li><a href="#" onclick="showSection('services')"><i class="fa-solid fa-camera fa-fw"></i> Inspección fotográfica</a></li>
+          <li><a href="#catalog"><i class="fa-solid fa-car fa-fw"></i> Catálogo de vehículos</a></li>
+          <li><a href="#services"><i class="fa-solid fa-briefcase fa-fw"></i> Alquiler corporativo</a></li>
+          <li><a href="#services"><i class="fa-solid fa-truck fa-fw"></i> Flotas comerciales</a></li>
+          <li><a href="#services"><i class="fa-solid fa-camera fa-fw"></i> Inspección fotográfica</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4 class="footer-heading">Empresa</h4>
         <ul class="footer-links">
-          <li><a href="#" onclick="showSection('contact')"><i class="fa-solid fa-location-dot fa-fw"></i> Sucursales</a></li>
-          <li><a href="#" onclick="showSection('contact')"><i class="fa-solid fa-envelope fa-fw"></i> Contacto</a></li>
-          <li><a href="#"><i class="fa-solid fa-file-lines fa-fw"></i> Términos y condiciones</a></li>
-          <li><a href="#"><i class="fa-solid fa-lock fa-fw"></i> Política de privacidad</a></li>
+          <li><a href="#contact"><i class="fa-solid fa-location-dot fa-fw"></i> Sucursales</a></li>
+          <li><a href="#contact"><i class="fa-solid fa-envelope fa-fw"></i> Contacto</a></li>
+          <li><a href="javascript:void(0)" onclick="showToast('Sección de términos y condiciones en actualización legal.');"><i class="fa-solid fa-file-lines fa-fw"></i> Términos y condiciones</a></li>
+          <li><a href="javascript:void(0)" onclick="showToast('Política de privacidad conforme a la normativa vigente.');"><i class="fa-solid fa-lock fa-fw"></i> Política de privacidad</a></li>
         </ul>
       </div>
       <div class="footer-col">
